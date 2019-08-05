@@ -10,10 +10,18 @@ namespace USFMToolsSharp.Renderers.JSON
     {
         public List<string> UnrenderableMarkers;
         public JArray jsonUSFM;
+        public JSONConfig jsonConfig;
         public JSONRenderer()
         {
             UnrenderableMarkers = new List<string>();
             jsonUSFM = new JArray();
+            jsonConfig = new JSONConfig();
+        }
+        public JSONRenderer(JSONConfig config)
+        {
+            UnrenderableMarkers = new List<string>();
+            jsonUSFM = new JArray();
+            jsonConfig = config;
         }
         public string Render(USFMDocument input)
         {
@@ -21,7 +29,10 @@ namespace USFMToolsSharp.Renderers.JSON
             {
                 jsonUSFM.Add(RenderMarker(marker));
             }
-
+            if (jsonConfig.isMinified)
+            {
+                return jsonUSFM.ToString(Formatting.None);
+            }
             return jsonUSFM.ToString();
         }
         public JObject RenderMarker(Marker input)
@@ -133,16 +144,26 @@ namespace USFMToolsSharp.Renderers.JSON
                     output.Add("Identifier", vPMarker.Identifier);
                     output.Add("Character", vPMarker.VerseCharacter);
                     break;
-                case FQAEndMarker _:
-                case FEndMarker _:
-                case VPEndMarker _:
+                case VPEndMarker vPEndMarker:
+                    output.Add("Identifier", vPEndMarker.Identifier);
+                    break;
+                case FQAEndMarker fQAEndMarker:
+                    output.Add("Identifier", fQAEndMarker.Identifier);
+                    break;
+                case FEndMarker fEndMarker:
+                    output.Add("Identifier", fEndMarker.Identifier);
                     break;
                 default:
+                    output.Add("Identifier", input.Identifier);
                     UnrenderableMarkers.Add(input.Identifier);
                     break;
             }
 
             return output;
+        }
+        public void clearJSONElements()
+        {
+            jsonUSFM.Clear();
         }
 
     }
