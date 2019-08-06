@@ -9,26 +9,29 @@ namespace USFMToolsSharp.Renderers.JSON
     public class JSONRenderer
     {
         public List<string> UnrenderableMarkers;
-        public JArray jsonUSFM;
+        public JObject jsonUSFM;
         public JSONConfig jsonConfig;
         public JSONRenderer()
         {
             UnrenderableMarkers = new List<string>();
-            jsonUSFM = new JArray();
+            jsonUSFM = new JObject();
             jsonConfig = new JSONConfig();
         }
         public JSONRenderer(JSONConfig config)
         {
             UnrenderableMarkers = new List<string>();
-            jsonUSFM = new JArray();
+            jsonUSFM = new JObject();
             jsonConfig = config;
         }
         public string Render(USFMDocument input)
         {
+            JArray usfmDocJSON = new JArray();
             foreach(Marker marker in input.Contents)
             {
-                jsonUSFM.Add(RenderMarker(marker));
+                usfmDocJSON.Add(RenderMarker(marker));
             }
+            jsonUSFM.Add("USFMDocument", usfmDocJSON);
+
             if (jsonConfig.isMinified)
             {
                 return jsonUSFM.ToString(Formatting.None);
@@ -150,7 +153,7 @@ namespace USFMToolsSharp.Renderers.JSON
         } 
         public void clearJSONElements()
         {
-            jsonUSFM.Clear();
+            jsonUSFM.RemoveAll();
         }
 
     }
