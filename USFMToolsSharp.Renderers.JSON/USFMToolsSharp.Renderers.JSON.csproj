@@ -2,11 +2,24 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.1.0</Version>
+    <Authors>@rbnswartz;@BryanHo10</Authors>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/WycliffeAssociates/USFMToolsSharp.Renderers.JSON</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WycliffeAssociates/USFMToolsSharp.Renderers.JSON</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="USFMToolsSharp" Version="0.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
