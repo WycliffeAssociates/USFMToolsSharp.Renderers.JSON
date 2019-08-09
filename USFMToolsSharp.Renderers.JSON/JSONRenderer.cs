@@ -9,22 +9,20 @@ namespace USFMToolsSharp.Renderers.JSON
     public class JSONRenderer
     {
         public List<string> UnrenderableMarkers;
-        public JObject jsonUSFM;
         public JSONConfig jsonConfig;
         public JSONRenderer()
         {
             UnrenderableMarkers = new List<string>();
-            jsonUSFM = new JObject();
             jsonConfig = new JSONConfig();
         }
         public JSONRenderer(JSONConfig config)
         {
             UnrenderableMarkers = new List<string>();
-            jsonUSFM = new JObject();
             jsonConfig = config;
         }
         public string Render(USFMDocument input)
         {
+            JObject jsonUSFM = new JObject();
             JArray usfmDocJSON = new JArray();
             foreach(Marker marker in input.Contents)
             {
