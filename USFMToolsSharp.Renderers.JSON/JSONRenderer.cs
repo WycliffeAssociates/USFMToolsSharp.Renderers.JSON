@@ -151,10 +151,6 @@ namespace USFMToolsSharp.Renderers.JSON
             }
             return contents;
         } 
-        public void clearJSONElements()
-        {
-            jsonUSFM.RemoveAll();
-        }
 
     }
 }
