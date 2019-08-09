@@ -1,6 +1,6 @@
 ![GitHub](https://img.shields.io/github/license/WycliffeAssociates/USFMToolsSharp.Renderers.JSON?color=blue)
 ![Travis (.com) branch](https://img.shields.io/travis/com/WycliffeAssociates/USFMToolsSharp.Renderers.JSON/master)
-![GitHub release](https://img.shields.io/github/release/WycliffeAssociates/USFMToolsSharp.Renderers.JSON)
+![Nuget](https://img.shields.io/nuget/v/USFMToolsSharp.Renderers.JSON?color=blue)
 ![Nuget](https://img.shields.io/nuget/dt/USFMToolsSharp.Renderers.JSON?color=blue)
 
 # USFMToolsSharp.Renderers.JSON
