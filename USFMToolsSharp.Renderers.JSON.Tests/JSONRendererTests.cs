@@ -51,7 +51,6 @@ namespace USFMToolsSharp.Renderers.JSON.Tests
         }
         public string buildJSON(string usfm)
         {
-            render = new JSONRenderer(new JSONConfig(isMinified: true));
             return render.Render(parser.ParseFromString(usfm));
         }
 
