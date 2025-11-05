@@ -35,6 +35,12 @@ namespace USFMToolsSharp.Renderers.JSON.Tests
             Assert.AreEqual("{\"USFMDocument\":[{\"Type\":\"CMarker\",\"Identifier\":\"c\",\"Number\":\"0\",\"Contents\":[]}]}", buildJSON("\\c 0"));
         }
         [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void TestChapterRenderInvalidNegative()
+        {
+            buildJSON("\\c -1");
+        }
+        [TestMethod]
         public void TestVerseRender()
         {
             Assert.AreEqual("{\"USFMDocument\":[{\"Type\":\"CMarker\",\"Identifier\":\"c\",\"Number\":\"1\",\"Contents\":[{\"Type\":\"VMarker\",\"Identifier\":\"v\",\"Number\":\"1\",\"Contents\":[{\"Type\":\"TextBlock\",\"Text\":\"This is a simple verse.\"}]}]}]}", buildJSON("\\c 1 \\v 1 This is a simple verse."));
