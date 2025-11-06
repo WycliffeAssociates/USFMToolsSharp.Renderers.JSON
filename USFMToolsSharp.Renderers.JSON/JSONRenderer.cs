@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using USFMToolsSharp.Models.Markers;
@@ -34,9 +35,9 @@ namespace USFMToolsSharp.Renderers.JSON
 
             if (jsonConfig.isMinified)
             {
-                return jsonUSFM.ToJsonString(new JsonSerializerOptions { WriteIndented = false });
+                return jsonUSFM.ToJsonString(new JsonSerializerOptions { WriteIndented = false, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping});
             }
-            return jsonUSFM.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
+            return jsonUSFM.ToJsonString(new JsonSerializerOptions { WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping});
         }
         public JsonObject RenderMarker(Marker input)
         {
