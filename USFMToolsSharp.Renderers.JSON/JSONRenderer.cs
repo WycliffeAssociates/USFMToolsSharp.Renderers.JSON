@@ -1,7 +1,8 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using USFMToolsSharp.Models.Markers;
 
 namespace USFMToolsSharp.Renderers.JSON
@@ -9,142 +10,142 @@ namespace USFMToolsSharp.Renderers.JSON
     public class JSONRenderer
     {
         public List<string> UnrenderableMarkers;
-        public JObject jsonUSFM;
+        public JsonObject jsonUSFM;
         public JSONConfig jsonConfig;
         public JSONRenderer()
         {
             UnrenderableMarkers = new List<string>();
-            jsonUSFM = new JObject();
+            jsonUSFM = new JsonObject();
             jsonConfig = new JSONConfig();
         }
         public JSONRenderer(JSONConfig config)
         {
             UnrenderableMarkers = new List<string>();
-            jsonUSFM = new JObject();
+            jsonUSFM = new JsonObject();
             jsonConfig = config;
         }
         public string Render(USFMDocument input)
         {
-            JArray usfmDocJSON = new JArray();
+            JsonArray usfmDocJSON = new JsonArray();
             foreach(Marker marker in input.Contents)
             {
                 usfmDocJSON.Add(RenderMarker(marker));
             }
-            jsonUSFM.Add("USFMDocument", usfmDocJSON);
+            jsonUSFM["USFMDocument"] = usfmDocJSON;
 
             if (jsonConfig.isMinified)
             {
-                return jsonUSFM.ToString(Formatting.None);
+                return jsonUSFM.ToJsonString(new JsonSerializerOptions { WriteIndented = false, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping});
             }
-            return jsonUSFM.ToString();
+            return jsonUSFM.ToJsonString(new JsonSerializerOptions { WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping});
         }
-        public JObject RenderMarker(Marker input)
+        public JsonObject RenderMarker(Marker input)
         {
-            JObject output = new JObject();
+            JsonObject output = new JsonObject();
             switch (input)
             {
                 case PMarker pMarker:
-                    output.Add("Type", "PMarker");
-                    output.Add("Identifier",pMarker.Identifier);
-                    output.Add("Contents", RenderContents(pMarker));
+                    output["Type"] = "PMarker";
+                    output["Identifier"] = pMarker.Identifier;
+                    output["Contents"] = RenderContents(pMarker);
                     break;
                 case CMarker cMarker:
-                    output.Add("Type", "CMarker");
-                    output.Add("Identifier", cMarker.Identifier);
-                    output.Add("Number", cMarker.Number.ToString());
-                    output.Add("Contents", RenderContents(cMarker));
+                    output["Type"] = "CMarker";
+                    output["Identifier"] = cMarker.Identifier;
+                    output["Number"] = cMarker.Number.ToString();
+                    output["Contents"] = RenderContents(cMarker);
                     break;
                 case VMarker vMarker:
-                    output.Add("Type", "VMarker");
-                    output.Add("Identifier", vMarker.Identifier);
-                    output.Add("Number", vMarker.VerseNumber.ToString());
-                    output.Add("Contents", RenderContents(vMarker));
+                    output["Type"] = "VMarker";
+                    output["Identifier"] = vMarker.Identifier;
+                    output["Number"] = vMarker.VerseNumber.ToString();
+                    output["Contents"] = RenderContents(vMarker);
                     break;
                 case QMarker qMarker:
-                    output.Add("Type", "QMarker");
-                    output.Add("Identifier", qMarker.Identifier);
-                    output.Add("Indentation", qMarker.Depth.ToString());
-                    output.Add("Contents", RenderContents(qMarker));
+                    output["Type"] = "QMarker";
+                    output["Identifier"] = qMarker.Identifier;
+                    output["Indentation"] = qMarker.Depth.ToString();
+                    output["Contents"] = RenderContents(qMarker);
                     break;
                 case MMarker mMarker:
-                    output.Add("Type", "MMarker");
-                    output.Add("Identifier", mMarker.Identifier);
+                    output["Type"] = "MMarker";
+                    output["Identifier"] = mMarker.Identifier;
                     break;
                 case TextBlock textBlock:
-                    output.Add("Type", "TextBlock");
-                    output.Add("Text", textBlock.Text);
+                    output["Type"] = "TextBlock";
+                    output["Text"] = textBlock.Text;
                     break;
                 case BDMarker bdMarker:
-                    output.Add("Type", "BDMarker");
-                    output.Add("Identifier", bdMarker.Identifier);
-                    output.Add("Contents", RenderContents(bdMarker));
+                    output["Type"] = "BDMarker";
+                    output["Identifier"] = bdMarker.Identifier;
+                    output["Contents"] = RenderContents(bdMarker);
                     break;
                 case HMarker hMarker:
-                    output.Add("Type", "HMarker");
-                    output.Add("Identifier", hMarker.Identifier);
-                    output.Add("Header", hMarker.HeaderText);
+                    output["Type"] = "HMarker";
+                    output["Identifier"] = hMarker.Identifier;
+                    output["Header"] = hMarker.HeaderText;
                     break;
                 case MTMarker mTMarker:
-                    output.Add("Type", "MTMarker");
-                    output.Add("Identifier", mTMarker.Identifier);
-                    output.Add("Emphasis", mTMarker.Weight.ToString());
-                    output.Add("Title", mTMarker.Title);
+                    output["Type"] = "MTMarker";
+                    output["Identifier"] = mTMarker.Identifier;
+                    output["Emphasis"] = mTMarker.Weight.ToString();
+                    output["Title"] = mTMarker.Title;
                     break;
                 case FMarker fMarker:
-                    output.Add("Type", "FMarker");
-                    output.Add("Identifier", fMarker.Identifier);
-                    output.Add("Caller", fMarker.FootNoteCaller);
-                    output.Add("Contents", RenderContents(fMarker));
+                    output["Type"] = "FMarker";
+                    output["Identifier"] = fMarker.Identifier;
+                    output["Caller"] = fMarker.FootNoteCaller;
+                    output["Contents"] = RenderContents(fMarker);
                     break;
                 case FTMarker fTMarker:
-                    output.Add("Type", "FTMarker");
-                    output.Add("Identifier", fTMarker.Identifier);
-                    output.Add("Contents", RenderContents(fTMarker));
+                    output["Type"] = "FTMarker";
+                    output["Identifier"] = fTMarker.Identifier;
+                    output["Contents"] = RenderContents(fTMarker);
                     break;
                 case FQAMarker fQAMarker:
-                    output.Add("Type", "FQAMarker");
-                    output.Add("Identifier", fQAMarker.Identifier);
-                    output.Add("Contents", RenderContents(fQAMarker));
+                    output["Type"] = "FQAMarker";
+                    output["Identifier"] = fQAMarker.Identifier;
+                    output["Contents"] = RenderContents(fQAMarker);
                     break;
                 case IDEMarker ideMarker:
-                    output.Add("Type", "IDEMarker");
-                    output.Add("Identifier", ideMarker.Identifier);
-                    output.Add("Encoding", ideMarker.Encoding);
+                    output["Type"] = "IDEMarker";
+                    output["Identifier"] = ideMarker.Identifier;
+                    output["Encoding"] = ideMarker.Encoding;
                     break;
                 case IDMarker iDMarker:
-                    output.Add("Type", "IDMarker");
-                    output.Add("Identifier", iDMarker.Identifier);
-                    output.Add("Identification", iDMarker.TextIdentifier);
+                    output["Type"] = "IDMarker";
+                    output["Identifier"] = iDMarker.Identifier;
+                    output["Identification"] = iDMarker.TextIdentifier;
                     break;
                 case VPMarker vPMarker:
-                    output.Add("Type", "VPMarker");
-                    output.Add("Identifier", vPMarker.Identifier);
-                    output.Add("Character", vPMarker.VerseCharacter);
+                    output["Type"] = "VPMarker";
+                    output["Identifier"] = vPMarker.Identifier;
+                    output["Character"] = vPMarker.VerseCharacter;
                     break;
                 case VPEndMarker vPEndMarker:
-                    output.Add("Type", "VPEndMarker");
-                    output.Add("Identifier", vPEndMarker.Identifier);
+                    output["Type"] = "VPEndMarker";
+                    output["Identifier"] = vPEndMarker.Identifier;
                     break;
                 case FQAEndMarker fQAEndMarker:
-                    output.Add("Type", "FQAEndMarker");
-                    output.Add("Identifier", fQAEndMarker.Identifier);
+                    output["Type"] = "FQAEndMarker";
+                    output["Identifier"] = fQAEndMarker.Identifier;
                     break;
                 case FEndMarker fEndMarker:
-                    output.Add("Type", "FEndMarker");
-                    output.Add("Identifier", fEndMarker.Identifier);
+                    output["Type"] = "FEndMarker";
+                    output["Identifier"] = fEndMarker.Identifier;
                     break;
                 default:
-                    output.Add("Type", "Unknown");
-                    output.Add("Identifier", input.Identifier);
+                    output["Type"] = "Unknown";
+                    output["Identifier"] = input.Identifier;
                     UnrenderableMarkers.Add(input.Identifier);
                     break;
             }
 
             return output;
         }
-        public JArray RenderContents(Marker input)
+        public JsonArray RenderContents(Marker input)
         {
-            JArray contents = new JArray();
+            JsonArray contents = new JsonArray();
             foreach (Marker marker in input.Contents)
             {
                 contents.Add(RenderMarker(marker));
